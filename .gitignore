@@ -1,3 +1,4 @@
-node_modules
-dist 
-paint2d-win32-x64
+.idea/
+dist/
+node_modules/
+.DS_Store
