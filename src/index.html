@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+       <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./pages/not.css">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  </head>
+  <body>
+<header class="header">
+          <div class="header__box" id="plus"><p class="header__text">+</p></div>
+          <div class="header__box" id="brush"><img class="header__text" src="./img/brush.svg"></div>
+          <p class="header__record">Last record:</p>
+          <div class="header__setting" id="settingBtn"><img class="header__text" src="./img/setting.svg"></div>
+       </header>
+    <div id="main" class="main">
+        <p class="text">Альбом</p>
+        <div class="draw__elements2">
+          <p class="textGray">Вы еще ничего не нарисовали...</p>
+        </div>
+        
+    </div>
+    
+        <div id="draw" class="draw dis-active">
+             <p class="text">Рисунки</p>
+             <div class="draw__elements">
+
+             </div>
+        </div>
+    <div class="drawing dis-active">
+                <header class="header">
+          <div class="header__box" id="accept"><img class="header__text" src="./img/accept.svg"></div>
+           <div class="header__box" id="close"><img class="header__text" src="./img/close.svg"></div>
+          <p class="header__record">Last record:</p>
+          <div class="header__setting" id="settingBtn2"><img class="header__text" src="./img/setting.svg"></div>
+       </header>
+      <div class="pallete">
+	<div class="slider">
+		<output for="fader" id="volume">4</output>
+		<input type="range" id="fader" min="1" max="20" value="4" step="1" oninput="outputUpdate(value)">
+	</div>
+        <div id="colors" class="colors">
+
+        </div>
+        <input type="color" id="color" class="palleted">
+      </div>
+      <div class='canvas'>
+      <img id="sketch" ondragstart="return false;" >
+          <canvas id="cl" height="632px" width="833px"></canvas>
+          </div>
+
+    </div>
+
+    <p class="version">Ver:beta1.0.0</p>
+    <div id="popup" class="popup dis-active">
+      <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+      <form action="/upload" method="post" target="dummyframe" class="formFile" enctype="multipart/form-data">
+        <label>Файл</label><br>
+        <input type="file" id="myForm" accept="image/*" name="filedata" /><br><br>
+        <input type="submit" value="Send" />
+      </form>
+    </div>
+    <div class="setting dis-active" id="setting">
+      <div class="box">
+        <p class="box__text">Музыка</p>
+        <input type="range" class="box__input" min="0" max="100" >
+      </div>
+            <div class="box">
+        <p class="box__text">Звуки</p>
+        <input type="range" class="box__input" min="0" max="100" >
+      </div>
+      <div class="box">
+        <p class="box__text">Тема</p>
+        <img class="prev" onclick="minusSlide()" src="./img/prev.svg">
+        <p class="slideText">FLowOfRoses</p>
+        <p class="slideText">CottonCandy</p>
+        <p class="slideText">Space</p>
+        <p class="slideText">Anime</p>
+        <img class="next" onclick="plusSlide()" src="./img/next.svg">
+      </div>
+
+    </div>
+    <script src="./pages/index.js"></script>
+  </body>
+</html> 
