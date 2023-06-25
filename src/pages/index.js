@@ -1,5 +1,4 @@
 
-
 function addcss(name) {
     var css = './pages/' + name + '.css';
     console.log(css)
@@ -11,14 +10,23 @@ function addcss(name) {
 }
 
 addcss('FLowOfRoses');
+const albom = document.querySelector('.draw__elements2');
+fetch('../human/drawImg.json')
+    .then((response) => {
+        return response.json();
+    })
+    .then((data) => {
+        showDrawImages(data, albom, './human/drawImg/')
+    })
+
 
 fetch('../human/human.json')
-.then((response) => {
-return response.json();
-})
-.then((data) => {
- showImages(data, albom, './human/img/')
-})
+    .then((response) => {
+        return response.json();
+    })
+    .then((data) => {
+        showImages(data, elements, './human/img/')
+    })
 
 fetch('../human/images.json')
     .then((response) => {
@@ -33,7 +41,14 @@ fetch('../human/images.json')
 
 const elements = document.querySelector('.draw__elements');
 
-
+function showDrawImages(data, el, href) {
+    data.map((i) => {
+        const img = document.createElement('img');
+        img.src = href + i;
+        el.append(img)
+        document.querySelector('.textGray').classList.add('dis-active');
+    })
+}
 function showImages(data, el, href) {
     data.map((i) => {
         const img = document.createElement('img');
@@ -41,7 +56,7 @@ function showImages(data, el, href) {
         img.onclick = function draw() {
             const el2 = document.querySelector('.drawing ');
             const elementsImage = document.getElementById('sketch');
-            let myDetails = document.getElementById("draw"); 
+            let myDetails = document.getElementById("draw");
             myDetails.classList.add('dis-active')
             myDetails.classList.remove('active')
             el2.classList.remove('dis-active')
@@ -54,18 +69,19 @@ function showImages(data, el, href) {
                 main.classList.remove('dis-active')
                 main.classList.add('active')
             }
-    
-        } 
+
+        }
         el.append(img)
 
     })
+
 }
 
 let brush = document.getElementById("brush");
 brush.onclick = brush_click;
 
 function brush_click() {
-    let myDetails = document.getElementById("draw"); 
+    let myDetails = document.getElementById("draw");
     let main = document.getElementById("main");
     if (myDetails.classList.value === 'draw dis-active') {
         main.classList.add('dis-active')
@@ -103,7 +119,7 @@ plus.onclick = plus_click;
 
 function plus_click() {
     let myDetails = document.getElementById("popup");
-    if (myDetails.classList.value === 'popup dis-active'){
+    if (myDetails.classList.value === 'popup dis-active') {
         myDetails.classList.remove('dis-active')
         myDetails.classList.add('active')
     } else {
@@ -155,7 +171,7 @@ const colors = [
 ]
 const colorContainer = document.getElementById('colors');
 
- 
+
 
 var lineSize = 4;
 
@@ -167,8 +183,8 @@ function outputUpdate(vol) {
 
 var color = 'black';
 
-document.getElementById('color').oninput = function() {
-     color = this.value;
+document.getElementById('color').oninput = function () {
+    color = this.value;
 }
 
 colors.forEach(function (element) {
@@ -176,19 +192,26 @@ colors.forEach(function (element) {
     button.style = 'background:' + element.color;
     button.classList.add('color');
     button.onclick = function () {
-      color = element.color
+        color = element.color
     }
     colorContainer.append(button)
 });
 
 var canvas = document.getElementById('cl');
 var ctx = canvas.getContext('2d');
-const indicator = document.getElementById('accept');
 
+const indicator = document.getElementById('accept');
 const stop = document.getElementById('close');
+const saveBtn = document.getElementById('saveBtn');
+const headerRecord = document.getElementById('header__record');
+
 const sketch = document.getElementById('sketch');
 
-
+function showSaveButton() {
+    saveBtn.classList.remove('dis-active');
+    indicator.classList.add('dis-active');
+    stop.classList.add('dis-active');
+}
 
 var isRec = false,
     newDraw = false,
@@ -196,8 +219,8 @@ var isRec = false,
     posY = [],
     dyu = [],
     dxu = [],
-    colorses=[],
-    lineSizes=[]
+    colorses = [],
+    lineSizes = []
 
 stop.onclick = function close() {
     const elements = document.querySelector('.drawing ');
@@ -209,11 +232,11 @@ stop.onclick = function close() {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     posX = [],
-    posY = [],
-    dyu = [],
-    dxu = [],
-    colorses=[],
-    lineSizes=[]
+        posY = [],
+        dyu = [],
+        dxu = [],
+        colorses = [],
+        lineSizes = []
 }
 var currentColor = 'black';
 var currentLineSize = 4;
@@ -249,6 +272,7 @@ canvas.onmousemove = function drawIfPressed(e) {
             switchIndicator(false);
             autoDraw();
         }
+        showSaveButton();
     })
 
     canvas.onmouseup = function stopDeawing() {
@@ -265,18 +289,18 @@ canvas.onmousemove = function drawIfPressed(e) {
         dxu.push(pos.movementX);
         lineSizes.push(line);
         colorses.push(color);
-      }
-      function drawLine(x, y, dx, dy, lineSize, color) {
+    }
+    function drawLine(x, y, dx, dy, lineSize, color) {
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.lineTo(x + dx, y + dy);
         ctx.lineWidth = lineSize;
         ctx.strokeStyle = color;
         ctx.stroke();
-      }
+    }
 
-    function clearCanvas(){
-        if(newDraw){
+    function clearCanvas() {
+        if (newDraw) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             newDraw = false;
             if (sketch != null) {
@@ -286,53 +310,53 @@ canvas.onmousemove = function drawIfPressed(e) {
         ctx.beginPath();
     }
 
-   function switchIndicator(enable){
-       if(enable){
-           indicator.classList.add('isWrite');
-       }else{
-           indicator.classList.remove('isWrite');
-       }
-   }
-   function autoDraw() {
-    var xu = posX;
-    var yu = posY;
-    var lineSizesCopy = [...lineSizes]; // Создайте копию массива lineSizes
-    var colorsCopy = [...colorses]; // Создайте копию массива colorses
-  
-    var drawing = setInterval(() => {
-      var currentX = xu.shift();
-      var currentY = yu.shift();
-      var currentDX = dxu.shift();
-      var currentDY = dyu.shift();
-      var currentLine = lineSizesCopy.shift(); // Используйте текущую толщину линии из копии массива
-      var currentColor = colorsCopy.shift(); // Используйте текущий цвет из копии массива
-      lineSizes = [];
-      colorses = [];
-      if (xu.length <= 0 && yu.length <= 0) {
-        clearInterval(drawing);
-        switchIndicator(true);
-        isRec = false;
-        newDraw = true;
-      } else {
-        if (
-          currentX == undefined &&
-          currentY == undefined &&
-          currentDY == undefined &&
-          currentDX == undefined &&
-          currentLine == undefined &&
-          currentColor == undefined &&
-          lineSizesCopy == undefined &&
-          colorsCopy == undefined
-        ) {
-          ctx.beginPath();
+    function switchIndicator(enable) {
+        if (enable) {
+            indicator.classList.add('isWrite');
         } else {
-          drawLine(currentX, currentY, currentDX, currentDY, currentLine, currentColor); // Используйте текущие значения толщины линии и цвета
+            indicator.classList.remove('isWrite');
         }
-      }
-    }, 1);
-  }
-}  
-  
+    }
+    function autoDraw() {
+        var xu = posX;
+        var yu = posY;
+        var lineSizesCopy = [...lineSizes]; // Создайте копию массива lineSizes
+        var colorsCopy = [...colorses]; // Создайте копию массива colorses
+
+        var drawing = setInterval(() => {
+            var currentX = xu.shift();
+            var currentY = yu.shift();
+            var currentDX = dxu.shift();
+            var currentDY = dyu.shift();
+            var currentLine = lineSizesCopy.shift(); // Используйте текущую толщину линии из копии массива
+            var currentColor = colorsCopy.shift(); // Используйте текущий цвет из копии массива
+            lineSizes = [];
+            colorses = [];
+            if (xu.length <= 0 && yu.length <= 0) {
+                clearInterval(drawing);
+                switchIndicator(true);
+                isRec = false;
+                newDraw = true;
+            } else {
+                if (
+                    currentX == undefined &&
+                    currentY == undefined &&
+                    currentDY == undefined &&
+                    currentDX == undefined &&
+                    currentLine == undefined &&
+                    currentColor == undefined &&
+                    lineSizesCopy == undefined &&
+                    colorsCopy == undefined
+                ) {
+                    ctx.beginPath();
+                } else {
+                    drawLine(currentX, currentY, currentDX, currentDY, currentLine, currentColor); // Используйте текущие значения толщины линии и цвета
+                }
+            }
+        }, 1);
+    }
+}
+
 
 
 
@@ -367,30 +391,10 @@ function showSlides(n) {
     }
 
     slides[slideIndex - 1].style.display = "block";
-    console.log(slides[slideIndex-1].textContent)
+    console.log(slides[slideIndex - 1].textContent)
     addcss(slides[slideIndex - 1].textContent)
 }
 
-//uploads
-
-
-const albom = document.querySelector('.draw__elements2');
-document.querySelector('.formFile').addEventListener('submit', () => {
-    setTimeout(() => {
-        document.querySelectorAll('iframe').forEach( item =>
-            console.log(item.contentWindow.document.body.textContent),
-            fetch('../human/human.json')
-                .then((response) => {
-              return response.json();
-               })
-            .then((data) => {
-                 showImages(data, albom, './human/img/')
-              })
-        )
-    }, 100)
-
-
-})
 
 
 
