@@ -1,7 +1,6 @@
 
 function addcss(name) {
     var css = './pages/' + name + '.css';
-    console.log(css)
     var head = document.getElementsByTagName('head')[0];
     var s = document.createElement('link');
     s.setAttribute('rel', 'stylesheet');
@@ -11,13 +10,20 @@ function addcss(name) {
 
 addcss('FLowOfRoses');
 const albom = document.querySelector('.draw__elements2');
-fetch('../human/drawImg.json')
+
+
+
+
+
+
+function fetchs(){
+    fetch('../human/drawImg.json')
     .then((response) => {
         return response.json();
     })
     .then((data) => {
         showDrawImages(data, albom, './human/drawImg/')
-    })
+    });
 
 
 fetch('../human/human.json')
@@ -26,7 +32,7 @@ fetch('../human/human.json')
     })
     .then((data) => {
         showImages(data, elements, './human/img/')
-    })
+    });
 
 fetch('../human/images.json')
     .then((response) => {
@@ -37,6 +43,109 @@ fetch('../human/images.json')
         showImages(data, elements, './img/Drawings/')
     });
 
+
+fetch('../human/music.json')
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      showMusic(data, './human/music/');
+    });   
+}
+
+    fetchs()
+  function showMusic(songs, href) {   
+    let songIndex = 0; 
+     const player = document.querySelector('.musicPlayerContainer');
+     const playBtn = document.querySelector('.musicplay');
+     const nextBtn = document.querySelector('.musicnext');
+     const prevBtn = document.querySelector('.musicprev');
+     const audio = document.querySelector('.audio');
+     const progressContainer = document.querySelector('.progress_container');
+     const progress = document.querySelector('.progress');
+     const song = document.querySelector('.song');
+     const musicRange = document.querySelector('.musicRange');
+    function loadSong(songes,src){
+        song.textContent = songes
+        audio.src = `${src}${songes}`
+
+    }
+    loadSong(songs[songIndex], href)
+    
+    function playSong(){
+        player.classList.add("play")
+        playBtn.src = "./img/pause.png"
+        audio.play()
+    }
+    function pauseSong(){
+        player.classList.remove("play")
+        playBtn.src = "./img/play.png"
+        audio.pause()
+    }
+
+    playBtn.addEventListener('click', () => {
+        const isPlaying = player.classList.contains('play')
+        if(isPlaying){
+            pauseSong()
+        }else{
+            playSong()
+        }
+
+    })
+
+
+    function nextSong(){
+        songIndex++ 
+        if(songIndex > songs.length-1){
+            songIndex = 0
+        }
+        loadSong(songs[songIndex], href)
+        playSong()
+    }
+    nextBtn.addEventListener('click', nextSong)
+
+    function prevSong(){
+        songIndex-- 
+        if(songIndex < 0){
+            songIndex = songs.length - 1
+        }
+        loadSong(songs[songIndex], href)
+        playSong()
+    }
+    prevBtn.addEventListener('click', prevSong)
+
+
+    function updateProgress(e){
+      const {duration, currentTime} = e.srcElement
+      const progressPercent = ( currentTime / duration) * 100
+      progress.style.width = `${progressPercent}%`
+    }
+    audio.addEventListener('timeupdate', updateProgress)
+
+
+    function setProgress(e){
+        const width = this.clientWidth
+        const clickX = e.offsetX 
+        const duration = audio.duration
+        audio.currentTime = (clickX / width) * duration
+    }
+     progressContainer.addEventListener('click', setProgress)
+
+
+     audio.addEventListener('ended', nextSong)
+
+
+     function setVolume() {
+        audio.volume = musicRange.value / 100;
+      }
+
+      musicRange.addEventListener("input", setVolume);
+      setVolume()
+  }
+  
+  
+
+  
 
 
 const elements = document.querySelector('.draw__elements');
@@ -391,7 +500,6 @@ function showSlides(n) {
     }
 
     slides[slideIndex - 1].style.display = "block";
-    console.log(slides[slideIndex - 1].textContent)
     addcss(slides[slideIndex - 1].textContent)
 }
 

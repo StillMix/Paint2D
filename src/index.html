@@ -17,7 +17,43 @@
         <div class="header__box" id="brush">
             <img class="header__text" src="./img/brush.svg">
         </div>
-        <p class="header__record">Last record:</p>
+        <div class="musicPlayerContainer">
+           <img class="btn musicplay" src="./img/play.png">
+           <img class="btn musicprev" src="./img/previous.png">
+           <img class="btn musicnext" src="./img/next.png">
+           <p class="song">Вы еще не добавили музыку</p>
+           <audio class="audio"></audio>
+           <div class="progress_container">
+                <div class="progress"></div>
+           </div>
+           <input type="range" class="musicRange" min="0" max="100">
+          </div>
+          <div class="musicContainer">
+                 <p>Вы еще ничего не добавили</p> 
+                 <button id="uploadButton">Загрузить музыку</button>
+    <iframe name="dummyframe" id="dummyframe" class="up" style="display: none;"></iframe>
+    <form
+      id="uploadForm"
+      action="/uploadMusic"
+      target="dummyframe"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <input
+        type="file"
+        id="musicInput"
+        name="musicdata"
+        accept="audio/mp3"
+        multiple
+        style="display: none;"
+      />
+      <input type="submit" value="Загрузить" style="display: none;" />
+    </form>
+          </div>
+          
+          
+          
+          
         <div class="header__setting" id="settingBtn">
             <img class="header__text" src="./img/setting.svg">
         </div>
@@ -63,7 +99,7 @@
             <canvas id="cl" height="632px" width="833px"></canvas>
         </div>
     </div>
-    <p class="version">Ver:beta1.0.0</p>
+    <p class="version">Ver:beta1.1.3</p>
     <div id="popup" class="popup dis-active">
         <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
         <form action="/upload" method="post" target="dummyframe" class="formFile" enctype="multipart/form-data"
@@ -76,17 +112,15 @@
     <div class="setting dis-active" id="setting">
         <div class="box">
             <p class="box__text">Музыка</p>
-            <input type="range" class="box__input" min="0" max="100">
+            <input type="range" class="box__input musicRange" min="0" max="100">
         </div>
         <div class="box">
             <p class="box__text">Звуки</p>
             <input type="range" class="box__input" min="0" max="100">
         </div>
-        <form action="/uploadMusic" method="post" class="musicForm" id="musicForm" enctype="multipart/form-data"
-            onsubmit="refreshPage()">
-            <input type="file" id="musicFiles" accept=".mp3, .wav" name="musicFiles" /><br><br>
-            <input type="submit" value="Send" />
-        </form>
+        
+ 
+
 
         <div class="box">
             <p class="box__text">Тема</p>
@@ -121,8 +155,37 @@
                 }
             };
             xhr.send(JSON.stringify(requestData));
-            location.reload();
+            location.reload();  
         });
+
+      const uploadButton = document.getElementById("uploadButton");
+      const musicInput = document.getElementById("musicInput");
+      const uploadForm = document.getElementById("uploadForm");
+      const dummyFrame = document.querySelector(".up");
+      const audio = document.querySelector('.audio');
+      const playBtn = document.querySelector('.musicplay');
+      const player = document.querySelector('.musicPlayerContainer');
+      uploadButton.addEventListener("click", () => {
+        player.classList.remove("play")
+        playBtn.src = "./img/play.png"
+        audio.pause()
+        musicInput.click();
+      });
+
+      musicInput.addEventListener("change", () => {
+        uploadForm.submit();
+        
+      });
+      dummyFrame.addEventListener("load", () => {
+        fetch('../human/music.json')
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      showMusic(data, './human/music/');
+    }); 
+      })
+
     </script>
 </body>
 

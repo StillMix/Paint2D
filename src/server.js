@@ -7,6 +7,7 @@ const app = express();
 
 const uploadModule = require('./modules/upload.js');
 const saveModule = require('./modules/save.js');
+const uploadMusicModule = require('./modules/uploadMusic.js');
 
 // Middleware
 app.use(express.static(path.join(__dirname, '')));
@@ -14,8 +15,8 @@ app.use(express.static(__dirname));
 app.use(express.json());
 
 // Роуты
-
 app.use('/upload', uploadModule);
+app.use('/uploadMusic', uploadMusicModule);
 app.use('/save', saveModule);
 
 app.listen(PORT, () => {

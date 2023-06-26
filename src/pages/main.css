@@ -25,7 +25,49 @@ body {
     user-select: none;
 }
 
+.musicPlayerContainer {
+    margin: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
 
+  }
+  
+  
+  
+  .btn{
+    cursor: pointer;
+    margin: auto;
+    margin-left: 10px;
+    margin-right:5px ;
+    width: 35px;
+    height: 35px;
+  }
+  .btn:hover{
+    opacity: 0.8;
+  }
+  .song{
+    margin-left: 10px;
+  }
+  .progress_container{
+    margin-left: 10px;
+    background: #FFFFFF;
+    border-radius: 5px;
+    width: 30%;
+    height: 10px;
+    margin: auto;
+    margin-left: 10px;
+    margin-right:5px ;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    .progress{
+        background: blue;
+        border-radius: 5px;
+        height: 10px;
+    }
+  }
 /* Шапка */
 .header {
     display: flex;
@@ -54,7 +96,7 @@ body {
 }
 
 .header__setting{
-margin-left: auto;
+
 margin-right: 10px;
 }
 
